@@ -163,9 +163,9 @@ export default keystore;
 async function encryptKey(pwd, scryptParams) {
     const salt = libUtils.hexToBytes(scryptParams.salt);
     const saltStr=salt.map(v=>{
-        String.fromCharCode(v)
-    }).join('')
-    await asyncScryptsy(pwd, saltStr, +scryptParams.n, +scryptParams.r, +scryptParams.p, +scryptParams.keylen)
+        String.fromCharCode(v);
+    }).join('');
+    await asyncScryptsy(pwd, saltStr, +scryptParams.n, +scryptParams.r, +scryptParams.p, +scryptParams.keylen);
 }
 
 function cipherText({ hexData, pwd, nonce, algorithm }) {
