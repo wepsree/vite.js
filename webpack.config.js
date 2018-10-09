@@ -3,7 +3,7 @@ const path = require('path');
 
 // [TODO] vendor
 let webpackConfig = {
-    mode: process.env.NODE_ENV || 'development',
+    mode: 'production',
     entry: {
         index: path.join(__dirname, 'src/index.js')
     },

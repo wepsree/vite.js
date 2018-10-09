@@ -25,8 +25,8 @@ if (process.env.NODE_ENV !== 'testWatch') {
     });
 
     describe('Wallet_decryptKeystore', function() {
-        it('test_decrypt', function () {
-            let privKey = ViteJS.Wallet.Keystore.decrypt(keystore, '1');
+        it('test_decrypt', async function () {
+            let privKey = await ViteJS.Wallet.Keystore.decrypt(keystore, '1');
             let k = ViteJS.Vite.Account.newHexAddr(privKey);
             assert.equal(k.hexAddr, keyJSON.hexaddress);
         });
