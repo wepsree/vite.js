@@ -5,7 +5,9 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
-var _basicStruct2 = _interopRequireDefault(require("./basicStruct.js"));
+var _basicStruct2 = _interopRequireDefault(require("../basicStruct.js"));
+
+var _index = _interopRequireDefault(require("../../utils/index"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -27,31 +29,31 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
-var P2P =
+var Types =
 /*#__PURE__*/
 function (_basicStruct) {
-  _inherits(P2P, _basicStruct);
+  _inherits(Types, _basicStruct);
 
-  function P2P(provider) {
-    _classCallCheck(this, P2P);
+  function Types(provider) {
+    _classCallCheck(this, Types);
 
-    return _possibleConstructorReturn(this, _getPrototypeOf(P2P).call(this, provider));
+    return _possibleConstructorReturn(this, _getPrototypeOf(Types).call(this, provider));
   }
 
-  _createClass(P2P, [{
-    key: "networkAvailable",
-    value: function networkAvailable() {
-      return this.provider.request('p2p_networkAvailable');
+  _createClass(Types, [{
+    key: "isValidHexAddr",
+    value: function isValidHexAddr(hexAddr) {
+      return _index.default.isValidHexAddr(hexAddr);
     }
   }, {
-    key: "peersCount",
-    value: function peersCount() {
-      return this.provider.request('p2p_peersCount');
+    key: "isValidTokenId",
+    value: function isValidTokenId(tokenId) {
+      return this.provider.request('types.IsValidHexTokenTypeId', tokenId);
     }
   }]);
 
-  return P2P;
+  return Types;
 }(_basicStruct2.default);
 
-var _default = P2P;
+var _default = Types;
 exports.default = _default;

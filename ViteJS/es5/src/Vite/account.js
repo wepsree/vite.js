@@ -5,6 +5,8 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
+var _bn = _interopRequireDefault(require("bn.js"));
+
 var _basicStruct2 = _interopRequireDefault(require("./basicStruct"));
 
 var _utils = _interopRequireDefault(require("../../libs/utils"));
@@ -35,6 +37,8 @@ var nacl = require('../../libs/nacl_blake2b');
 
 var blake = require('blakejs/blake2b');
 
+var defaultHash = _utils.default.bytesToHex(new _bn.default(0).toArray('big', 32));
+
 var Account =
 /*#__PURE__*/
 function (_basicStruct) {
@@ -47,6 +51,11 @@ function (_basicStruct) {
   }
 
   _createClass(Account, [{
+    key: "isValidHexAddr",
+    value: function isValidHexAddr(hexAddr) {
+      return _address.default.isValidHexAddr(hexAddr);
+    }
+  }, {
     key: "newHexAddr",
     value: function newHexAddr(privKey) {
       return _address.default.newHexAddr(privKey);
@@ -54,6 +63,7 @@ function (_basicStruct) {
   }, {
     key: "signTX",
     value: function signTX(accountBlock, privKey) {
+      var type = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'byte';
       var sourceHex = getSource(accountBlock);
 
       var source = _utils.default.hexToBytes(sourceHex);
@@ -71,9 +81,9 @@ function (_basicStruct) {
       var signatureHex = _utils.default.bytesToHex(signature);
 
       return {
-        pubKey: pubKey,
         hash: hashString,
-        signature: signatureHex
+        pubKey: type === 'byte' ? _utils.default.hexToBytes(pubKey) : pubKey,
+        signature: type === 'byte' ? signature : signatureHex
       };
     }
   }]);
@@ -81,37 +91,42 @@ function (_basicStruct) {
   return Account;
 }(_basicStruct2.default);
 
-var _default = Account;
+var _default = Account; // 1.sendBlock
+// hash = HashFunction(BlockType + PrevHash  + Height + AccountAddress + ToAddress + Amount + TokenId  + Fee + SnapshotHash + Data + Timestamp + LogHash + Nonce）
+// 2.receiveBlock
+// hash = HashFunction(BlockType + PrevHash  + Height + AccountAddress + FromBlockHash + Fee + SnapshotHash + Data + Timestamp + LogHash + Nonce）
+
 exports.default = _default;
 
 function getSource(accountBlock) {
   var source = '';
-  source += accountBlock.prevHash || '';
-  source += accountBlock.meta && accountBlock.meta.height ? _utils.default.strToHex(accountBlock.meta.height) : '';
+  var blockType = Buffer.from('' + accountBlock.blockType).toString();
+  source += blockType ? _utils.default.bytesToHex(blockType) : '';
+  source += accountBlock.prevHash || defaultHash;
+  source += accountBlock.height ? _utils.default.bytesToHex(new _bn.default(accountBlock.height).toArray('big', 8)) : '';
   source += accountBlock.accountAddress ? _address.default.getAddrFromHexAddr(accountBlock.accountAddress) : '';
 
-  if (accountBlock.to) {
-    source += _address.default.getAddrFromHexAddr(accountBlock.to);
+  if (accountBlock.toAddress) {
+    source += _address.default.getAddrFromHexAddr(accountBlock.toAddress);
+    var amount = new _bn.default(accountBlock.amount);
+    source += accountBlock.amount && !amount.isZero() ? _utils.default.bytesToHex(amount.toArray('big')) : '';
     source += getRawTokenid(accountBlock.tokenId) || '';
-    source += _utils.default.strToHex(accountBlock.amount) || '';
   } else {
-    source += accountBlock.fromHash || '';
+    source += accountBlock.fromBlockHash || defaultHash;
   }
 
-  source += 'EFBFBD';
+  var fee = new _bn.default(accountBlock.fee);
+  source += accountBlock.fee && !fee.isZero() ? _utils.default.bytesToHex(fee.toArray('big')) : '';
+  source += accountBlock.snapshotHash || '';
 
   if (accountBlock.data) {
-    var byte = _utils.default.strToUtf8Bytes(accountBlock.data);
-
-    var hex = _utils.default.bytesToHex(byte);
-
+    var hex = Buffer.from(accountBlock.data, 'base64').toString('hex');
     source += hex;
   }
 
-  source += accountBlock.snapshotTimestamp || '';
-  source += accountBlock.nonce || '';
-  source += accountBlock.difficulty || '';
-  source += accountBlock.fAmount ? _utils.default.strToHex(accountBlock.fAmount) : '';
+  source += accountBlock.timestamp ? _utils.default.bytesToHex(new _bn.default(accountBlock.timestamp).toArray('big', 8)) : '';
+  source += accountBlock.logHash || '';
+  source += accountBlock.nonce ? Buffer.from(accountBlock.nonce, 'base64').toString('hex') : '';
   return source;
 }
 

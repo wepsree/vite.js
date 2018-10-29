@@ -5,9 +5,13 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
-var _basicStruct2 = _interopRequireDefault(require("./basicStruct.js"));
+var _bn = _interopRequireDefault(require("bn.js"));
 
-var _bignumber = _interopRequireDefault(require("bignumber.js"));
+var _address = _interopRequireDefault(require("../address"));
+
+var _utils = _interopRequireDefault(require("../../libs/utils"));
+
+var _basicStruct2 = _interopRequireDefault(require("./basicStruct.js"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -29,16 +33,9 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
-_bignumber.default.config({
-  FORMAT: {
-    decimalSeparator: '.',
-    groupSeparator: '',
-    groupSize: 0,
-    secondaryGroupSize: 0,
-    fractionGroupSeparator: ' ',
-    fractionGroupSize: 0
-  }
-});
+var blake = require('blakejs/blake2b');
+
+var defaultHash = _utils.default.bytesToHex(new _bn.default(0).toArray('big', 32));
 
 var Ledger =
 /*#__PURE__*/
@@ -52,67 +49,63 @@ function (_basicStruct) {
   }
 
   _createClass(Ledger, [{
-    key: "sendTx",
-    value: function sendTx(accountBlock) {
-      return this.provider.request('ledger_sendTx', [accountBlock]);
-    }
-  }, {
-    key: "getBlocksByAccAddr",
-    value: function getBlocksByAccAddr(_ref) {
-      var accAddr = _ref.accAddr,
+    key: "getBlocks",
+    value: function getBlocks(_ref) {
+      var addr = _ref.addr,
           index = _ref.index,
-          _ref$count = _ref.count,
-          count = _ref$count === void 0 ? 20 : _ref$count,
-          _ref$needTokenInfo = _ref.needTokenInfo,
-          needTokenInfo = _ref$needTokenInfo === void 0 ? false : _ref$needTokenInfo;
-      return this.provider.request('ledger_getBlocksByAccAddr', [accAddr, index, count, needTokenInfo]);
+          _ref$pageCount = _ref.pageCount,
+          pageCount = _ref$pageCount === void 0 ? 50 : _ref$pageCount;
+      return this.provider.batch([{
+        type: 'request',
+        methodName: 'ledger_getBlocksByAccAddr',
+        params: [addr, index, pageCount]
+      }, {
+        type: 'request',
+        methodName: 'ledger_getAccountByAccAddr',
+        params: [addr]
+      }]).then(function (data) {
+        if (!data || data.length < 2) {
+          return null;
+        }
+
+        var account = data[1].result;
+        return {
+          list: data[0].result || [],
+          totalNum: account && account.totalNumber ? account.totalNumber : 0
+        };
+      });
     }
   }, {
-    key: "getAccountByAccAddr",
-    value: function getAccountByAccAddr(accAddr) {
-      return this.provider.request('ledger_getAccountByAccAddr', accAddr);
-    }
-  }, {
-    key: "getUnconfirmedInfo",
-    value: function getUnconfirmedInfo(accAddr) {
-      return this.provider.request('ledger_getUnconfirmedInfo', accAddr);
-    }
-  }, {
-    key: "getUnconfirmedBlocksByAccAddr",
-    value: function getUnconfirmedBlocksByAccAddr(accAddr) {
-      return this.provider.request('ledger_getUnconfirmedBlocksByAccAddr', accAddr);
-    }
-  }, {
-    key: "getLatestBlock",
-    value: function getLatestBlock(accAddr) {
-      return this.provider.request('ledger_getLatestBlock', accAddr);
-    }
-  }, {
-    key: "getTokenMintage",
-    value: function getTokenMintage() {
-      return this.provider.request('ledger_getTokenMintage');
-    }
-  }, {
-    key: "getBlocksByHash",
-    value: function getBlocksByHash(accAddr) {
-      return this.provider.request('ledger_getBlocksByHash', accAddr);
-    }
-  }, {
-    key: "getInitSyncInfo",
-    value: function getInitSyncInfo() {
-      return this.provider.request('ledger_getInitSyncInfo');
-    }
-  }, {
-    key: "getSnapshotChainHeight",
-    value: function getSnapshotChainHeight() {
-      return this.provider.request('ledger_getSnapshotChainHeight');
+    key: "getBalance",
+    value: function getBalance(addr) {
+      return this.provider.batch([{
+        type: 'request',
+        methodName: 'ledger_getAccountByAccAddr',
+        params: [addr]
+      }, {
+        type: 'request',
+        methodName: 'onroad_getAccountOnroadInfo',
+        params: [addr]
+      }]).then(function (data) {
+        if (!data || !data.length || data.length < 2) {
+          return null;
+        }
+
+        var result = {
+          balance: data[0].result,
+          onroad: data[1].result
+        };
+        return result;
+      });
     }
   }, {
     key: "getReceiveBlock",
     value: function getReceiveBlock(addr) {
+      var _this = this;
+
       return this.provider.batch([{
         type: 'request',
-        methodName: 'ledger_getUnconfirmedBlocksByAccAddr',
+        methodName: 'onroad_getOnroadBlocksByAddress',
         params: [addr, 0, 1]
       }, {
         type: 'request',
@@ -136,15 +129,17 @@ function (_basicStruct) {
 
         var block = blocks[0];
         var baseTx = getBaseTx(addr, latestBlock, latestSnapshotChainHash);
-        baseTx.fromHash = block.hash;
-        baseTx.tokenId = block.tokenId;
+        baseTx.blockType = 4;
         block.data && (baseTx.data = block.data);
-        return baseTx;
+        baseTx.fromBlockHash = block.hash || '';
+        return getNonce.call(_this, addr, baseTx.prevHash, baseTx);
       });
     }
   }, {
     key: "getSendBlock",
     value: function getSendBlock(_ref2) {
+      var _this2 = this;
+
       var fromAddr = _ref2.fromAddr,
           toAddr = _ref2.toAddr,
           tokenId = _ref2.tokenId,
@@ -165,11 +160,19 @@ function (_basicStruct) {
         var latestBlock = data[0].result;
         var latestSnapshotChainHash = data[1].result;
         var baseTx = getBaseTx(fromAddr, latestBlock, latestSnapshotChainHash);
-        message && (baseTx.data = message);
+
+        if (message) {
+          var utf8bytes = _utils.default.strToUtf8Bytes(message);
+
+          var base64Str = Buffer.from(utf8bytes).toString('base64');
+          baseTx.data = base64Str;
+        }
+
         baseTx.tokenId = tokenId;
-        baseTx.to = toAddr;
+        baseTx.toAddress = toAddr;
         baseTx.amount = amount;
-        return baseTx;
+        baseTx.blockType = 2;
+        return getNonce.call(_this2, fromAddr, baseTx.prevHash, baseTx);
       });
     }
   }]);
@@ -180,24 +183,40 @@ function (_basicStruct) {
 var _default = Ledger;
 exports.default = _default;
 
-function getBaseTx(accountAddress, latestBlock, snapshotTimestamp) {
-  var height = latestBlock && latestBlock.meta && latestBlock.meta.height ? new _bignumber.default(latestBlock.meta.height).plus(1).toFormat() : '1';
-  var timestamp = new _bignumber.default(new Date().getTime()).dividedToIntegerBy(1000).toNumber();
+function getBaseTx(accountAddress, latestBlock, snapshotHash) {
+  var height = latestBlock && latestBlock.height ? new _bn.default(latestBlock.height).add(new _bn.default(1)).toString() : '1';
+  var timestamp = new _bn.default(new Date().getTime()).div(new _bn.default(1000)).toNumber();
   var baseTx = {
     accountAddress: accountAddress,
-    meta: {
-      height: height
-    },
+    height: height,
     timestamp: timestamp,
-    snapshotTimestamp: snapshotTimestamp,
-    nonce: '0000000000',
-    difficulty: '0000000000',
-    fAmount: '0'
+    snapshotHash: snapshotHash,
+    // logHash: '',
+    // quota: '',
+    fee: '0'
   };
-
-  if (latestBlock && latestBlock.hash) {
-    baseTx.prevHash = latestBlock.hash;
-  }
-
+  baseTx.prevHash = latestBlock && latestBlock.hash ? latestBlock.hash : defaultHash;
   return baseTx;
+}
+
+function getPowHash(addr, prevHash) {
+  var prev = prevHash || defaultHash;
+
+  var realAddr = _address.default.getAddrFromHexAddr(addr);
+
+  return _utils.default.bytesToHex(blake.blake2b(realAddr + prev, null, 32));
+}
+
+function getNonce(addr, prevHash, baseTx) {
+  var _this3 = this;
+
+  var hash = getPowHash(addr, prevHash);
+  return new Promise(function (res, rej) {
+    return _this3.provider.request('pow_getPowNonce', ['', hash]).then(function (data) {
+      baseTx.nonce = data.result;
+      return res(baseTx);
+    }).catch(function (err) {
+      return rej(err);
+    });
+  });
 }
