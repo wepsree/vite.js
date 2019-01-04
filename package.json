@@ -91,7 +91,8 @@
         "scryptsy": "^2.0.0",
         "ts-node": "^7.0.1",
         "websocket": "^1.0.26",
-        "xhr2": "^0.1.4"
+        "xhr2": "^0.1.4",
+        "fixed-parse-asn1":"git+https://github.com/hurrytospring/parse-asn1.git"
     },
     "nyc": {
         "require": [
