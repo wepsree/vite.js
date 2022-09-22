@@ -1,20 +1,8 @@
 {
-    "extension": [
-        ".js",
-        ".ts"
-    ],
-    "include": [
-        "src/*"
-    ],
-    "exclude": [
-        "*.d.ts",
-        "src/*/dist/**",
-        "src/*/es5/**"
-    ],
-    "reporter": [
-        "html",
-        "text"
-    ],
-    "sourceMap": true,
-    "instrument": true
+	"extension": [".js", ".ts"],
+	"include": ["src/*"],
+	"exclude": ["*.d.ts", "src/*/dist/**", "src/*/es5/**"],
+	"reporter": ["html", "text"],
+	"sourceMap": true,
+	"instrument": true
 }

@@ -1,9 +1,7 @@
 {
-    "version": "2.3.19",
-    "packages": [
-        "src/*"
-    ],
-    "publishConfig": {
-        "access": "public"
-    }
+	"version": "2.3.19",
+	"packages": ["src/*"],
+	"publishConfig": {
+		"access": "public"
+	}
 }

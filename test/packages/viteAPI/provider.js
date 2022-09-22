@@ -5,19 +5,27 @@ import HTTP_RPC from '../../../src/HTTP';
 
 const httpServer = new HTTP_RPC();
 const viteProvider = new Provider(httpServer, () => {
-    it('connected callback', function () {
-        assert.equal(true, true);
-    });
+	it('connected callback', function () {
+		assert.equal(true, true);
+	});
 });
 
 it('property _provider', function () {
-    assert.deepEqual(httpServer, viteProvider._provider);
+	assert.deepEqual(httpServer, viteProvider._provider);
 });
 
 it('property http isConnected', function () {
-    assert.deepEqual(true, viteProvider.isConnected);
+	assert.deepEqual(true, viteProvider.isConnected);
 });
 
-[ 'setProvider', 'unsubscribe', 'unsubscribeAll', 'request', 'sendNotification', 'batch', 'subscribe' ].forEach(key => {
-    assert.equal(typeof viteProvider[key], 'function');
+[
+	'setProvider',
+	'unsubscribe',
+	'unsubscribeAll',
+	'request',
+	'sendNotification',
+	'batch',
+	'subscribe',
+].forEach((key) => {
+	assert.equal(typeof viteProvider[key], 'function');
 });

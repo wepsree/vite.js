@@ -16,25 +16,35 @@ export type ContractInfo = _utils.ContractInfo;
  * @param methodName Methods of Account class
  * @param params
  */
-export function createAccountBlock(methodName: string, params: {
-    address: string,
-    [name: string]: any;
-}) {
-    const err = checkParams({ methodName, params }, [ 'methodName', 'params' ], [ {
-        name: 'methodName',
-        func: _m => typeof methodName === 'string'
-    }, {
-        name: 'params',
-        func: isObject
-    } ]);
-    if (err) {
-        throw err;
-    }
+export function createAccountBlock(
+	methodName: string,
+	params: {
+		address: string;
+		[name: string]: any;
+	}
+) {
+	const err = checkParams(
+		{ methodName, params },
+		['methodName', 'params'],
+		[
+			{
+				name: 'methodName',
+				func: (_m) => typeof methodName === 'string',
+			},
+			{
+				name: 'params',
+				func: isObject,
+			},
+		]
+	);
+	if (err) {
+		throw err;
+	}
 
-    const a = new _Account(params.address);
-    if (!a[methodName] || [ 'constructor', 'setProvider', 'setPrivateKey' ].includes(methodName)) {
-        throw new Error(`Don\'t support transaction type ${ methodName }`);
-    }
+	const a = new _Account(params.address);
+	if (!a[methodName] || ['constructor', 'setProvider', 'setPrivateKey'].includes(methodName)) {
+		throw new Error(`Don\'t support transaction type ${methodName}`);
+	}
 
-    return a[methodName](params);
+	return a[methodName](params);
 }

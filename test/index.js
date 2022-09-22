@@ -1,21 +1,21 @@
 import './cover';
 
 describe('Require package', function () {
-    require('./envTest/es5');
+	require('./envTest/es5');
 });
 
 describe('Communication Test: src/communication', function () {
-    require('./packages/communication');
+	require('./packages/communication');
 });
 
 describe('ViteAPI Test: src/viteAPI', function () {
-    require('./packages/viteAPI/provider');
-    require('./packages/viteAPI/index');
-    require('./packages/viteAPI/ws');
+	require('./packages/viteAPI/provider');
+	require('./packages/viteAPI/index');
+	require('./packages/viteAPI/ws');
 });
 
 describe('AccountBlock Test', function () {
-    require('./packages/accountBlock/account');
+	require('./packages/accountBlock/account');
 });
 
 // viteAPI
@@ -23,5 +23,5 @@ describe('AccountBlock Test', function () {
 // ipc
 // ws
 describe('RPC Test', function () {
-    require('./RPC/index.js');
+	require('./RPC/index.js');
 });

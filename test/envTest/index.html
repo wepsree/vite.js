@@ -1,26 +1,26 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8">
-        <script src="../../src/vitejs/dist/index.web.js"></script>
-        <script src="../../src/abi/dist/index.web.js"></script>
-        <script src="../../src/WS/dist/index.web.js"></script>
-        <script>
-            console.log(window.$vite_vitejs)
-            console.log(window.$vite_abi)
-            console.log(window.$vite_WS)
+	<head>
+		<meta charset="utf-8" />
+		<script src="../../src/vitejs/dist/index.web.js"></script>
+		<script src="../../src/abi/dist/index.web.js"></script>
+		<script src="../../src/WS/dist/index.web.js"></script>
+		<script>
+			console.log(window.$vite_vitejs);
+			console.log(window.$vite_abi);
+			console.log(window.$vite_WS);
 
-            const wallet = window.$vite_vitejs.wallet.createWallet();
-            console.log(wallet.entropy);
+			const wallet = window.$vite_vitejs.wallet.createWallet();
+			console.log(wallet.entropy);
 
-            window.$vite_vitejs.keystore.encrypt(wallet.entropy, '123111').then((keystore) => {
-                console.log(keystore);
-                window.$vite_vitejs.keystore.decrypt(keystore, '123111').then((d) => {
-                    console.log(d, d === wallet.entropy);
-                });
-            });
-            const provider = new window.$vite_WS.WS_RPC('ws://148.70.30.139:41423');
-            console.log(provider);
-        </script>
-    </head>
+			window.$vite_vitejs.keystore.encrypt(wallet.entropy, '123111').then((keystore) => {
+				console.log(keystore);
+				window.$vite_vitejs.keystore.decrypt(keystore, '123111').then((d) => {
+					console.log(d, d === wallet.entropy);
+				});
+			});
+			const provider = new window.$vite_WS.WS_RPC('ws://148.70.30.139:41423');
+			console.log(provider);
+		</script>
+	</head>
 </html>
