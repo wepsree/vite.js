@@ -13,7 +13,7 @@ import {
 	OffchainFragment,
 	ParamType,
 } from './fragments';
-import { blake2bHex, isHexString, isObject } from '~@vite/vitejs-utils';
+import { blake2bHex, isHexString, isObject } from '../utils';
 import { arrayify, getArrayDepth, hexlify, rightPadZero, safeParseJson } from './utils';
 
 export { Result };

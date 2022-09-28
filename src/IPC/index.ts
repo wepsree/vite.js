@@ -1,7 +1,10 @@
-import IPC_WS from '~@vite/vitejs-communication/ipc_ws';
+import IPC_WS from '../communication/ipc_ws';
 const net = require('net');
 
 class IpcRpc extends IPC_WS {
+	type: string;
+	delimiter: string;
+
 	constructor(path = '', timeout = 60000, options = { delimiter: '\n' }) {
 		super({
 			onEventTypes: ['error', 'end', 'timeout', 'data', 'close', 'connect'],
@@ -10,7 +13,7 @@ class IpcRpc extends IPC_WS {
 		});
 
 		if (!path) {
-			throw this.ERRORS.CONNECT();
+			throw this.ERRORS.CONNECT(path);
 		}
 
 		this.type = 'ipc';

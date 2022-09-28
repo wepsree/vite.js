@@ -1,4 +1,4 @@
-import { blake2bHex } from '~@vite/vitejs-utils';
+import { blake2bHex } from '../utils';
 
 const assert = require('assert');
 

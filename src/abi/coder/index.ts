@@ -1,4 +1,4 @@
-import * as BigNumber from 'bn.js';
+const BigNumber = require('bn.js');
 import { arrayify, hexlify } from '../utils';
 
 export interface Result extends ReadonlyArray<any> {
@@ -227,7 +227,7 @@ export class Writer {
 		return this._writeData(bytes);
 	}
 
-	_getValue(value: number | bigint | string | BigNumber): Buffer {
+	_getValue(value: number | bigint | string | typeof BigNumber): Buffer {
 		if (value instanceof BigNumber) {
 			value = value.toString(16);
 		}
@@ -241,7 +241,7 @@ export class Writer {
 		return bytes;
 	}
 
-	writeValue(value: number | bigint | string | BigNumber): number {
+	writeValue(value: number | bigint | string | typeof BigNumber): number {
 		return this._writeData(this._getValue(value));
 	}
 
@@ -314,7 +314,7 @@ export class Reader {
 		return bytes.slice(0, length);
 	}
 
-	readValue(): BigNumber {
+	readValue(): typeof BigNumber {
 		return new BigNumber(this.readBytes(this.wordSize));
 	}
 }

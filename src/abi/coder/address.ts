@@ -1,8 +1,5 @@
 import { Coder, Reader, Writer } from './index';
-import {
-	getAddressFromOriginalAddress,
-	getOriginalAddressFromAddress,
-} from '~@vite/vitejs-wallet/address';
+import { getAddressFromOriginalAddress, getOriginalAddressFromAddress } from '../../wallet/address';
 import { leftPadZero } from '../utils';
 
 export class AddressCoder extends Coder {

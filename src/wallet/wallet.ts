@@ -1,11 +1,11 @@
 const bip39 = require('bip39');
 const blake = require('blakejs/blake2b');
 
-import { checkParams, isNonNegativeInteger } from '~@vite/vitejs-utils';
+import { checkParams, isNonNegativeInteger } from '../utils';
 
 import * as hdKey from './hdKey';
 import * as addressLib from './address';
-import { Hex, Address } from './type';
+import { Hex, Address } from '../type';
 
 interface AddressObj {
 	publicKey: Hex;

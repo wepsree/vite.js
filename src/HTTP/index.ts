@@ -1,11 +1,16 @@
-import Communication from '~@vite/vitejs-communication/communication.js';
+import Communication from '../communication/communication';
 const XMLHttpRequest =
+	// @ts-ignore
 	typeof window !== 'undefined' && window.XMLHttpRequest ? window.XMLHttpRequest : require('xhr2');
 
 class HttpRpc extends Communication {
+	type: string;
+	host: string;
+	timeout: number;
+	headers: any[];
+	requestId: number;
 	constructor(host = 'http://localhost:23456', timeout = 60000, options = { headers: [] }) {
 		super();
-
 		this.type = 'http';
 		this.host = host;
 		this.timeout = timeout;
@@ -99,7 +104,7 @@ class HttpRpc extends Communication {
 			return Promise.reject(requestObj);
 		}
 
-		return this._send(requestObj).then((res) => {
+		return this._send(requestObj).then((res: { result: any; error: any }) => {
 			if (!res) {
 				throw this.ERRORS.INVALID_RESPONSE(res);
 			}
@@ -127,17 +132,16 @@ class HttpRpc extends Communication {
 	 */
 	batch(requests = []) {
 		let _requests = this._getBatchPayload(requests);
-
 		if (_requests instanceof Error) {
 			return Promise.reject(_requests);
 		}
 
-		return this._send(_requests).then((results) => {
+		return this._send(_requests).then((results?: any[]) => {
 			results = (results || []).sort((a, b) => a.id - b.id);
 
 			const _results = [];
 			let i = 0;
-			_requests.forEach((_request) => {
+			(Array.isArray(_requests) ? _requests : [_requests]).forEach((_request) => {
 				// notification
 				if (!_request.id) {
 					_results.push(null);

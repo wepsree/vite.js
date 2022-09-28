@@ -1,4 +1,5 @@
-import { Coder, Reader, Writer, BigNumber } from './index';
+const BigNumber = require('bn.js');
+import { Coder, Reader, Writer } from './index';
 
 const MaxUint256 = new BigNumber(
 	'ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff',
@@ -21,7 +22,7 @@ export class NumberCoder extends Coder {
 		return 0;
 	}
 
-	encode(writer: Writer, value: bigint | number | string | BigNumber): number {
+	encode(writer: Writer, value: bigint | number | string | typeof BigNumber): number {
 		if (typeof value === 'bigint') {
 			value = value.toString(16);
 		}

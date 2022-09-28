@@ -1,7 +1,8 @@
-const scryptsy = require('scryptsy');
+// const scryptsy = require('scryptsy');
+const crypto = require('browserify-aes');
 
-declare const window;
-const crypto = typeof window === 'undefined' ? require('crypto') : require('browserify-aes');
+// declare const window;
+// const crypto = typeof window === 'undefined' ? require('crypto') : require('browserify-aes');
 
 const TAG_LEN = 32;
 
@@ -33,16 +34,17 @@ export function decipheriv({ algorithm, encryptPwd, nonce, encryptText }, additi
 export function encryptPwd(pwd, scryptParams, selfScryptsy) {
 	const salt = Buffer.from(scryptParams.salt, 'hex');
 	if (!selfScryptsy) {
-		return Promise.resolve(
-			scryptsy(
-				pwd,
-				Buffer.from(salt),
-				Number(scryptParams.n),
-				Number(scryptParams.r),
-				Number(scryptParams.p),
-				Number(scryptParams.keylen)
-			)
-		);
+		return Promise
+			.resolve
+			// scryptsy(
+			// 	pwd,
+			// 	Buffer.from(salt),
+			// 	Number(scryptParams.n),
+			// 	Number(scryptParams.r),
+			// 	Number(scryptParams.p),
+			// 	Number(scryptParams.keylen)
+			// )
+			();
 	}
 	return selfScryptsy(
 		pwd,

@@ -1,8 +1,8 @@
-import { createAccountBlock } from '~@vite/vitejs-accountblock/index';
+import { createAccountBlock } from '../../../src/accountBlock';
 
 const assert = require('assert');
 
-import AccountClass from '~@vite/vitejs-accountblock/account';
+import AccountClass from '../../../src/accountBlock/account';
 import { Vite_TokenId } from '../../../src/constant/index';
 
 describe('createAccountBlock', function () {

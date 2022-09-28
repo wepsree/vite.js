@@ -1,4 +1,4 @@
-import { ProviderType } from './type';
+import { ProviderType } from '../type';
 
 class EventEmitter {
 	id: string;

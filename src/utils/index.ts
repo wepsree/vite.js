@@ -1,7 +1,7 @@
-import { paramsFormat, paramsMissing } from '~@vite/vitejs-error';
+import { paramsFormat, paramsMissing } from '../error';
 
 import * as _e from './ed25519';
-import { Hex, TokenId } from './type';
+import { Hex, TokenId } from '../type';
 
 const bn = require('bn.js');
 const blake = require('blakejs/blake2b');

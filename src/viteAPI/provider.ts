@@ -1,6 +1,6 @@
-import { requestTimeout } from '~@vite/vitejs-error';
+import { requestTimeout } from '../error';
 
-import { RPCRequest, RPCResponse, Methods } from './type';
+import { RPCRequest, RPCResponse, Methods } from '../type';
 import EventEmitter from './eventEmitter';
 
 class ProviderClass {

@@ -1,4 +1,4 @@
-import { isHexString } from '~@vite/vitejs-utils';
+import { isHexString } from '../utils';
 
 const HexCharacters = '0123456789abcdef';
 

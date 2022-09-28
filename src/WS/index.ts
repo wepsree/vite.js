@@ -1,7 +1,16 @@
-import IPC_WS from '~@vite/vitejs-communication/ipc_ws';
+import IPC_WS from '../communication/ipc_ws';
 const Websocket = require('websocket').w3cwebsocket;
 
+type ClientConfig = {
+	keepalive: boolean;
+	keepaliveInterval: number;
+};
 class WsRpc extends IPC_WS {
+	protocol: string;
+	headers: string;
+	clientConfig: ClientConfig;
+	_destroyed: boolean;
+
 	constructor(
 		path = 'ws://localhost:23457',
 		timeout = 60000,
@@ -28,9 +37,7 @@ class WsRpc extends IPC_WS {
 		this.protocol = options.protocol;
 		this.headers = options.headers;
 		this.clientConfig = options.clientConfig;
-
 		this._destroyed = false;
-
 		this.reconnect();
 	}
 

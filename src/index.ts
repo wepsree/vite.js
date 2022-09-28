@@ -1,17 +1,17 @@
-import * as _abi from './abi/index';
-import * as _error from './error/index';
-import * as _keystore from './keystore/index';
-import * as _utils from './utils/index';
-import * as _constant from './constant/index';
+import * as _abi from './abi';
+import * as _error from './error';
+import * as _keystore from './keystore';
+import * as _utils from './utils';
+import * as _constant from './constant';
 import * as _account from './accountBlock/account';
-import * as _accountBlock from './accountBlock/index';
-import * as _communication from './communication/index';
+import * as _accountBlock from './accountBlock';
+import * as _communication from './communication';
 import * as _provider from './viteAPI/provider';
-import _viteAPI from './viteAPI/index';
-import _wallet from './wallet/index';
-import _httpRpc from './HTTP/index';
-import _ipcRpc from './IPC/index';
-import _wsRpc from './WS/index';
+import _viteAPI from './viteAPI';
+import _wallet from './wallet';
+import _httpRpc from './HTTP';
+import _ipcRpc from './IPC';
+import _wsRpc from './WS';
 
 // Not Change
 export const abi = _abi;

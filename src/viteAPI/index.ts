@@ -1,25 +1,16 @@
-import { Contracts } from '~@vite/vitejs-constant';
-import { checkParams, isArray, blake2bHex } from '~@vite/vitejs-utils';
-import {
-	isValidAddress,
-	AddressType,
-	getOriginalAddressFromAddress,
-} from '~@vite/vitejs-wallet/address';
-import {
-	decodeParameters,
-	encodeFunctionCall,
-	getAbiByType,
-	getAbiByName,
-} from '~@vite/vitejs-abi';
+import { Contracts } from '../constant';
+import { checkParams, isArray, blake2bHex } from '../utils';
+import { isValidAddress, AddressType, getOriginalAddressFromAddress } from '../wallet/address';
+import { decodeParameters, encodeFunctionCall, getAbiByType, getAbiByName } from '../abi';
 import {
 	Default_Contract_TransactionType,
 	encodeContractList,
 	getTransactionType,
 	decodeContractAccountBlock,
 	ContractInfo,
-} from '~@vite/vitejs-accountblock/utils';
+} from '../accountblock/utils';
 
-import { Address, AccountBlockType, Transaction, Hex, Base64, BigInt } from './type';
+import { Address, AccountBlockType, Transaction, Hex, Base64, BigInt } from '../type';
 
 import Provider, {
 	ConnectHandler,

@@ -1,9 +1,9 @@
-import { isValidAddress } from '~@vite/vitejs-wallet/address';
-import { checkParams, isHexString } from '~@vite/vitejs-utils';
+import { isValidAddress } from '../wallet/address';
+import { checkParams, isHexString } from '../utils';
 
 import Account from './account';
 
-import { Address, Hex, ProviderType, AccountBlockBlock } from './type';
+import { Address, Hex, ProviderType, AccountBlockBlock } from '../type';
 const sleep = (ms: number) => setTimeout(() => Promise.resolve(), ms);
 export class ReceiveAccountBlockTask {
 	address: Address;

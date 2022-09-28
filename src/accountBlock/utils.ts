@@ -1,8 +1,8 @@
 const BigNumber = require('bn.js');
 const blake = require('blakejs/blake2b');
 
-import { paramsMissing, paramsFormat } from '~@vite/vitejs-error';
-import { Delegate_Gid, Contracts } from '~@vite/vitejs-constant';
+import { paramsMissing, paramsFormat } from '../error';
+import { Delegate_Gid, Contracts } from '../constant';
 import {
 	getAbiByType,
 	encodeParameters,
@@ -12,7 +12,7 @@ import {
 	decodeFunctionCall,
 	getAbiByName,
 	JsonInterface,
-} from '~@vite/vitejs-abi';
+} from '../abi';
 import {
 	isValidAddress,
 	getAddressFromPublicKey,
@@ -20,7 +20,7 @@ import {
 	getOriginalAddressFromAddress,
 	AddressType,
 	getAddressFromOriginalAddress,
-} from '~@vite/vitejs-wallet/address';
+} from '../wallet/address';
 import {
 	checkParams,
 	isNonNegativeInteger,
@@ -31,7 +31,7 @@ import {
 	ed25519,
 	isBase64String,
 	isArray,
-} from '~@vite/vitejs-utils';
+} from '../utils';
 
 import {
 	BlockType,
@@ -43,8 +43,8 @@ import {
 	BigInt,
 	AccountBlockType,
 	Uint8,
-} from './type';
-import { EventFragment, Fragment, FunctionFragment } from '~@vite/vitejs-abi/fragments';
+} from '../type';
+import { EventFragment, Fragment, FunctionFragment } from '../abi/fragments';
 
 export const Default_Hash = '0000000000000000000000000000000000000000000000000000000000000000'; // A total of 64 0
 

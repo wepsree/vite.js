@@ -1,9 +1,9 @@
 const bip39 = require('bip39');
 const hd = require('@sisi/ed25519-blake2b-hd-key');
 
-import { checkParams } from '~@vite/vitejs-utils';
+import { checkParams } from '../utils';
 
-import { Hex } from './type';
+import { Hex } from '../type';
 
 export const ROOT_PATH = "m/44'/666666'";
 

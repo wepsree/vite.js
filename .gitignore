@@ -8,7 +8,6 @@ package-lock.json
 dist
 lib
 static
-lerna-debug.log
 es5
 distSrc
 tempSrc

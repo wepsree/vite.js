@@ -1,12 +1,15 @@
-const jsonrpc = require('jsonrpc-lite');
-
+import jsonrpc from 'jsonrpc-lite';
 import errors from './errors';
 
 class Communication {
+	ERRORS: typeof errors;
+	jsonrpc: typeof jsonrpc;
+	_requestManager: object;
+	_requestId: number;
+
 	constructor() {
 		this.ERRORS = errors;
 		this.jsonrpc = jsonrpc;
-
 		this._requestManager = {};
 		this._requestId = 0;
 	}

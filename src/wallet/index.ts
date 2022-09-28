@@ -1,11 +1,11 @@
 const bip39 = require('bip39');
 
-import { checkParams } from '~@vite/vitejs-utils';
+import { checkParams } from '../utils';
 
 import Wallet from './wallet';
 import * as hdKey from './hdKey';
 import * as addressLib from './address';
-import { AddressObj } from './type';
+import { AddressObj } from '../type';
 
 export default {
 	...addressLib,

@@ -1,13 +1,13 @@
 const BigNumber = require('bn.js');
 const blake = require('blakejs/blake2b');
 
-import { checkParams, isHexString, isBase64String } from '~@vite/vitejs-utils';
+import { checkParams, isHexString, isBase64String } from '../utils';
 import {
 	getOriginalAddressFromAddress,
 	getAddressFromPublicKey,
 	isValidAddress,
 	createAddressByPrivateKey,
-} from '~@vite/vitejs-wallet/address';
+} from '../wallet/address';
 
 import {
 	isRequestBlock,
@@ -41,7 +41,7 @@ import {
 	AccountBlockBlock,
 	ProviderType,
 	AccountBlockType,
-} from './type';
+} from '../type';
 
 class AccountBlockClass {
 	blockType: BlockType;

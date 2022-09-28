@@ -1,5 +1,5 @@
 import { Coder, Reader, Writer } from './index';
-import { getOriginalTokenIdFromTokenId, getTokenIdFromOriginalTokenId } from '~@vite/vitejs-utils';
+import { getOriginalTokenIdFromTokenId, getTokenIdFromOriginalTokenId } from '../../utils';
 import { leftPadZero } from '../utils';
 
 export class TokenIdCoder extends Coder {

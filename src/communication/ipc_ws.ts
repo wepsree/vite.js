@@ -1,6 +1,21 @@
-import Communication from './communication.js';
+import Communication from './communication';
+const Websocket = require('websocket').w3cwebsocket;
 
 class IpcWs extends Communication {
+	path: string;
+	timeout: number;
+	_onEventTypes: any[];
+	_sendFuncName: string;
+	connectStatus: boolean;
+	socket: typeof Websocket;
+	responseCbs: { [key: string]: (args: any) => void };
+	_connectEnd: null | ((msg: any) => void);
+	_connectError: null | ((error: any) => void);
+	_connectTimeout: null | (() => void);
+	_connectConnect: null | (() => void);
+	_connectClose: null | (() => void);
+	subscribeMethod: null | ((responses: any) => void);
+
 	constructor({ onEventTypes, sendFuncName, path }) {
 		super();
 

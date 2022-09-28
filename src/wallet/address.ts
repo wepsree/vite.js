@@ -1,7 +1,7 @@
-import { checkParams, ed25519, blake2b, isHexString } from '~@vite/vitejs-utils';
-import { addressIllegal } from '~@vite/vitejs-error';
+import { checkParams, ed25519, blake2b, isHexString } from '../utils';
+import { addressIllegal } from '../error';
 
-import { Hex, AddressObj, Address } from './type';
+import { Hex, AddressObj, Address } from '../type';
 
 const { keyPair, getPublicKey } = ed25519;
 

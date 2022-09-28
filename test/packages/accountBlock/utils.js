@@ -1,5 +1,3 @@
-import * as abi from '~@vite/vitejs-abi/index';
-
 const assert = require('assert');
 
 import { Contracts } from '../../../src/constant/index';

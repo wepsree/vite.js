@@ -1,9 +1,5 @@
-import { BlockType, Vite_TokenId, Contracts } from '~@vite/vitejs-constant';
-import {
-	isValidAddress,
-	AddressType,
-	createAddressByPrivateKey,
-} from '~@vite/vitejs-wallet/address';
+import { BlockType, Vite_TokenId, Contracts } from '../constant';
+import { isValidAddress, AddressType, createAddressByPrivateKey } from '../wallet/address';
 import {
 	checkParams,
 	isNonNegativeInteger,
@@ -13,9 +9,9 @@ import {
 	isValidSBPName,
 	isValidTokenId,
 	isBase64String,
-} from '~@vite/vitejs-utils';
-import { paramsConflict } from '~@vite/vitejs-error';
-import { JsonInterface } from '~@vite/vitejs-abi';
+} from '../utils';
+import { paramsConflict } from '../error';
+import { JsonInterface } from '../abi';
 
 import AccountBlock from './accountBlock';
 import { getCreateContractData, getCallContractData } from './utils';
@@ -32,7 +28,7 @@ import {
 	Uint256,
 	Bytes32,
 	ProviderType,
-} from './type';
+} from '../type';
 
 class AccountClass {
 	readonly address: Address;
